@@ -5,9 +5,9 @@ import random
 import os
 import numpy as np
 from tqdm import tqdm
-from model.transformer import VIT
+from model.transformer import VisionTransformer
 from torch.utils.data.dataloader import DataLoader
-from dataset.mnist_color_texture_dataset import MnistDataset
+from dataset.mnist_color_texture_dataset import CustomDataset
 from torch.optim import Adam
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
@@ -50,8 +50,8 @@ def train(args):
 
     
     # Create the model and dataset
-    model = VIT(config['model_params']).to(device)
-    mnist = MnistDataset('train', config['dataset_params'],
+    model = VisionTransformer(config['model_params']).to(device)
+    mnist = CustomDataset('train', config['dataset_params'],
                          im_h=config['model_params']['image_height'],
                          im_w=config['model_params']['image_width'])
     mnist_loader = DataLoader(mnist, batch_size=config['train_params']['batch_size'], shuffle=True, num_workers=4)
@@ -87,6 +87,6 @@ def train(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Arguments for vit training')
     parser.add_argument('--config', dest='config_path',
-                        default='config/default.yaml', type=str)
+                        default='config/set.yaml', type=str)
     args = parser.parse_args()
     train(args)
